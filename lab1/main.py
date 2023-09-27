@@ -1,4 +1,12 @@
 
+"""1) Создаем два класc Point (x, y, z)
+2) Создаем класс Vector. Может задаваться по кординатам или по двум точкам
+3) Определяем опурацию сложения, вычитания, получение обратногов вкетора., построние единичного вектора, скалярное и векторное произвдение, смешанное, длину вктора. Определение коллинеарнгости и компланарносити векторов, нахождение рассятония и угла между векторами
+Кто умее пеереопрделять орперации делаем переопрделенияЮ кито не умеет, пока деоллайте отдельными функиями
+Написать программу с консольным интерфейсом. Программа позхволяет твводить векторы и делать различные операции с ними
+
+Типы данных - шаблоны"""
+
 import math
 
 class Point:
@@ -56,6 +64,15 @@ class Vector:
     def distance(self, other):
         displacement = self - other
         return displacement.length()
+    def angle(self, other):
+        dot_product = self.dot_product(other)
+        magnitude1 = self.length()
+        magnitude2 = other.length()
+        if magnitude1 == 0 or magnitude2 == 0:
+            return None
+        angle_radians = math.acos(dot_product / (magnitude1 * magnitude2))
+        angle_degrees = math.degrees(angle_radians)
+        return angle_degrees
 
 while True:
     print("1. Создать вектор по координатам")
