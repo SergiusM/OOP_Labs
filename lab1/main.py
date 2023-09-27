@@ -28,7 +28,7 @@ class Vector:
         return Vector(-self.x, -self.y, -self.z)
     
     def normalize(self):
-        magnitude = sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
+        magnitude = (self.x ** 2 + self.y ** 2 + self.z ** 2)**(0.5)
         return Vector(self.x / magnitude, self.y / magnitude, self.z / magnitude)
     
     def dot_product(self, other):
@@ -43,7 +43,7 @@ class Vector:
         return Vector(self.x * scalar, self.y * scalar, self.z * scalar)
     
     def length(self):
-        return sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
+        return (self.x ** 2 + self.y ** 2 + self.z ** 2)**(0.5)
     
     def is_collinear(self, other):
         cross_product = self.cross_product(other)
@@ -82,7 +82,7 @@ while True:
         y = float(input("Введите координату y: "))
         z = float(input("Введите координату z: "))
         vector = Vector(x, y, z)
-        print(f"Создан вектор: {vector}")
+        print(f"Создан вектор:",vector.x,vector.y,vector.z)
     
     if choice == 2:
         x1 = float(input("Введите координату x первой точки: "))
@@ -96,7 +96,7 @@ while True:
         point2 = Point(x2, y2, z2)
         
         vector = Vector(point1=point1, point2=point2)
-        print(f"Создан вектор: {vector}")
+        print(f"Создан вектор: ",vector.x,vector.y,vector.z)
     
     if choice == 3:
         x1 = float(input("Введите координату x первого вектора: "))
@@ -110,7 +110,7 @@ while True:
         vector2 = Vector(x2, y2, z2)
         
         result = vector1.__add__(vector2)
-        print(f"Результат сложения: {result}")
+        print(f"Результат сложения:", result.x,result.y,result.z)
     if choice == 4:
         x1 = float(input("Введите координату x первого вектора: "))
         y1 = float(input("Введите координату y первого вектора: "))
@@ -123,7 +123,7 @@ while True:
         vector2 = Vector(x2, y2, z2)
         
         result = vector1.__sub__(vector2)
-        print(f"Результат вычитания: {result}")
+        print(f"Результат вычитания: ",result.x,result.y,result.z)
         
     if choice == 5:
         x = float(input("Введите координату x вектора: "))
@@ -133,7 +133,7 @@ while True:
         vector = Vector(x, y, z)
         
         result = vector.__neg__()
-        print(f"Обратный вектор: {result}")
+        print(f"Обратный вектор:",result.x,result.y,result.z)
     
     if choice == 6:
         x = float(input("Введите координату x вектора: "))
@@ -143,7 +143,7 @@ while True:
         vector = Vector(x, y, z)
         
         result = vector.normalize()
-        print(f"Единичный вектор: {result}")
+        print(f"Единичный вектор: ",result.x,result.y,result.z)
     
     if choice == 7:
         x1 = float(input("Введите координату x первого вектора: "))
