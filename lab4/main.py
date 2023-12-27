@@ -38,8 +38,9 @@ class Keyboard:
 
     def undo(self):
         if self.history:
-            self.keymap[self.history[-1]][1]()
-            self.history.pop()
+            last_key = self.history.pop()
+            if last_key in self.keymap:
+                self.keymap[last_key][1]()
 
     def is_key_registered(self, key):
         return key in self.keymap
