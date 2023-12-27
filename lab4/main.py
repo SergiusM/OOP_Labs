@@ -22,62 +22,80 @@
 """
 import time
 
+class Keyboard:
+    def __init__(self):
+        self.keymap = {}
+        self.history = []
 
-# Объект для хранения переназначаемых действий
-key_actions = {
-  'A': lambda: print('Вы нажали A'),
-  'B': lambda: print('Вы нажали B'),
-  'C': lambda: print('Вы нажали C'),
-  'D': lambda: print('Вы нажали D'),
-  'E': lambda: print('Вы нажали E'),
-  'F': lambda: print('Вы нажали F'),
-  'ctrl+c': lambda: print('Вы нажали Ctrl+C'),
-  'ctrl+v': lambda: print('Вы нажали Ctrl+V'),
-}
+    def register_key(self, key, action, undo_action):
+        self.keymap[key] = (action, undo_action)
 
-# Стек для хранения истории действий
-action_history = []
+    def press_key(self, key):
+        if key not in self.keymap:
+            raise Exception("Неизвестная клавиша нажата")
+        self.history.append(key)
+        self.keymap[key][0]()
 
-# Функция для нажатия клавиши
-def press_key(key):
-  if key in key_actions:
-    key_actions[key]()
-    action_history.append(key)
+    def undo(self):
+        if self.history:
+            self.keymap[self.history[-1]][1]()
+            self.history.pop()
 
-# Функция для отката действий
-def undo_last_action():
-  if action_history:
-    last_action = action_history.pop()
-    print('Отменено действие: ' + last_action)
+    def is_key_registered(self, key):
+        return key in self.keymap
 
 
-# Функция для симуляции нажатия клавиши
-def simulate_key_press(key):
-  press_key(key)
-  time.sleep(1)
+class Workflow:
+    def __init__(self, keyboard):
+        self.keyboard = keyboard
+        self.actions = []
 
-# Симуляция последовательности нажатий клавиш
-simulate_key_press('A') # нажать 'A' 
-simulate_key_press('B') # нажать 'B'
-undo_last_action() # отменить последнее действие
+    def keypress(self, key):
+        self.keyboard.press_key(key)
+        time.sleep(1)
 
-# Переназначение действия для клавиши 'A'
-key_actions['A'] = lambda: print('Переназначено: теперь вы нажали A')
-key_actions['C'] = lambda: print('Переназначено: теперь вы нажали C')
-key_actions['E'] = lambda: print('Переназначено: теперь вы нажали E')
-key_actions['ctrl+c'] = lambda: print('Переназначено: теперь вы нажали Ctrl+C')
+    def undo(self):
+        self.keyboard.undo()
+        time.sleep(1)
 
-# Сброс истории действий
-action_history = []
+    def perform(self):
+        for action in self.actions:
+            action()
+            time.sleep(1)
 
-# Перезапуск workflow
-simulate_key_press('A') # нажать 'A' 
-simulate_key_press('B') # нажать 'B'
-simulate_key_press('C') # нажать 'C'
-simulate_key_press('D') # нажать 'D'
-simulate_key_press('E') # нажать 'E'
-press_key('ctrl+c') # нажать 'ctrl+c'
-press_key('ctrl+v') # нажать 'ctrl+v'
-simulate_key_press('F') # нажать 'F'
-undo_last_action() # отменить последнее действие
-undo_last_action() # отменить последнее действие
+    def add_action(self, action):
+        self.actions.append(action)
+
+
+def main():
+    keyboard = Keyboard()
+    keyboard.register_key("A", lambda: print("Клавиша A нажата"), lambda: None)
+    keyboard.register_key("Ctrl+C", lambda: print("Комбинация Ctrl+C нажата"), lambda: print("Ctrl+C action undone"))
+    keyboard.register_key("Ctrl+V", lambda: print("Комбинация Ctrl+V нажата"), lambda: print("Ctrl+V action undone"))
+    keyboard.register_key("F1", lambda: print("F1 нажата"), lambda: None)
+    keyboard.register_key("F2", lambda: print("F2 нажата"), lambda: None)
+
+    
+    workflow = Workflow(keyboard)
+    workflow.add_action(lambda: workflow.keypress("A"))
+    workflow.add_action(lambda: workflow.keypress("Ctrl+C"))
+    workflow.add_action(lambda: workflow.keypress("Ctrl+V"))
+    workflow.add_action(lambda: workflow.keypress("F1")) 
+    workflow.add_action(lambda: workflow.keypress("F2")) 
+    workflow.add_action(lambda: workflow.undo())
+    workflow.add_action(lambda: workflow.undo())
+
+    workflow.perform()
+
+    print("\nПереназначение клавиш и перезапуск процесса...")
+    keyboard.register_key("A", lambda: print("Клавиша A теперь ничего не делает"), lambda: None)
+    keyboard.register_key("Ctrl+C", lambda: print("Комбинация Ctrl+C теперь выводит 87 "), lambda: print("Undo action for Ctrl+C"))
+    keyboard.register_key("Ctrl+V", lambda: print("Комбинация Ctrl+V теперь выводит 1"), lambda: print("Undo action for Ctrl+V"))
+
+    workflow.perform()
+
+    if keyboard.is_key_registered("Ctrl+V"):
+        print("Клавиша Ctrl+V зарегистрирована в системе")
+
+if __name__ == '__main__':
+    main()
