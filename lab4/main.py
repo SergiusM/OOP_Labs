@@ -1,25 +1,3 @@
-"""
-1) Создать виртуальную
-клавиатуру с
-переназначаемыми действиями
-для
-клавиш, с возможностью отката
-действий назад.
-
-2) Продемонстрировать работу
-клавиатуры сделал workflow из
-нажатий различных комбинаций
-клавиш и откатов назад.
-'Симулировать демонстрацию.
-нажатий клавиш путем вывода
-значения в консоль и задержкой
-между нажатиями
-
-3) Продемонстрировать
-переназначение клавиши и
-комбинации клавиш с
-перезапуком workflow
-"""
 import time
 
 class Keyboard:
@@ -39,8 +17,7 @@ class Keyboard:
     def undo(self):
         if self.history:
             last_key = self.history.pop()
-            if last_key in self.keymap:
-                self.keymap[last_key][1]()
+            self.keymap[last_key][1]()
 
     def is_key_registered(self, key):
         return key in self.keymap
@@ -81,8 +58,8 @@ def main():
     workflow.add_action(lambda: workflow.keypress("A"))
     workflow.add_action(lambda: workflow.keypress("Ctrl+C"))
     workflow.add_action(lambda: workflow.keypress("Ctrl+V"))
-    workflow.add_action(lambda: workflow.undo())
-    workflow.add_action(lambda: workflow.undo())
+    workflow.add_action(lambda: workflow.undo())  # Changed to directly call undo
+    workflow.add_action(lambda: workflow.undo())  # Changed to directly call undo
     workflow.add_action(lambda: workflow.keypress("F1")) 
     workflow.add_action(lambda: workflow.keypress("F2")) 
 
@@ -96,8 +73,6 @@ def main():
 
     workflow.perform()
 
-    if keyboard.is_key_registered("Ctrl+V"):
-        print("Клавиша Ctrl+V зарегистрирована в системе")
 
 if __name__ == '__main__':
     main()
