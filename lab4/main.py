@@ -70,27 +70,28 @@ class Workflow:
 def main():
     keyboard = Keyboard()
     keyboard.register_key("A", lambda: print("Клавиша A нажата"), lambda: None)
-    keyboard.register_key("Ctrl+C", lambda: print("Комбинация Ctrl+C нажата"), lambda: print("Ctrl+C action undone"))
-    keyboard.register_key("Ctrl+V", lambda: print("Комбинация Ctrl+V нажата"), lambda: print("Ctrl+V action undone"))
-    keyboard.register_key("F1", lambda: print("F1 нажата"), lambda: None)
-    keyboard.register_key("F2", lambda: print("F2 нажата"), lambda: None)
+    keyboard.register_key("Ctrl+C", lambda: print("Комбинация Ctrl+C нажата"), lambda: print("Ctrl+C действие отменено"))
+    keyboard.register_key("Ctrl+V", lambda: print("Комбинация Ctrl+V нажата"), lambda: print("Ctrl+V действие отменено"))
+    keyboard.register_key("F1", lambda: print("Клавиша F1 нажата"), lambda: None)
+    keyboard.register_key("F2", lambda: print("Клавиша F2 нажата"), lambda: None)
 
     
     workflow = Workflow(keyboard)
     workflow.add_action(lambda: workflow.keypress("A"))
     workflow.add_action(lambda: workflow.keypress("Ctrl+C"))
     workflow.add_action(lambda: workflow.keypress("Ctrl+V"))
+    workflow.add_action(lambda: workflow.undo())
+    workflow.add_action(lambda: workflow.undo())
     workflow.add_action(lambda: workflow.keypress("F1")) 
     workflow.add_action(lambda: workflow.keypress("F2")) 
-    workflow.add_action(lambda: workflow.undo())
-    workflow.add_action(lambda: workflow.undo())
+
 
     workflow.perform()
 
     print("\nПереназначение клавиш и перезапуск процесса...")
     keyboard.register_key("A", lambda: print("Клавиша A теперь ничего не делает"), lambda: None)
-    keyboard.register_key("Ctrl+C", lambda: print("Комбинация Ctrl+C теперь выводит 87 "), lambda: print("Undo action for Ctrl+C"))
-    keyboard.register_key("Ctrl+V", lambda: print("Комбинация Ctrl+V теперь выводит 1"), lambda: print("Undo action for Ctrl+V"))
+    keyboard.register_key("Ctrl+C", lambda: print("Комбинация Ctrl+C теперь выводит 87 "), lambda: print("Отмена действия для Ctrl+C"))
+    keyboard.register_key("Ctrl+V", lambda: print("Комбинация Ctrl+V теперь выводит 1"), lambda: print("Отмена действия для Ctrl+V"))
 
     workflow.perform()
 
